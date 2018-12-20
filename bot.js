@@ -28,7 +28,7 @@ client.user.setGame(`RN | Brodcast`,"http://twitch.tv/S-F")
 });
 
 client.on('message', message => {
-    var prefix = "-";
+    var prefix = "$";
     
         if (message.author.id === client.user.id) return;
         if (message.guild) {
@@ -55,4 +55,4 @@ client.on('message', message => {
         }
     });
 
-client.login('BOT_TOKEN');
+client.login(process.env.BOT_TOKEN);
