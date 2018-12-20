@@ -3,7 +3,7 @@ const client = new Discord.Client();
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-client.user.setGame(`RN | Welcome`,"http://twitch.tv/S-F")
+client.user.setGame(`RN | Brodcast`,"http://twitch.tv/S-F")
   console.log('')
   console.log('')
   console.log('╔[═════════════════════════════════════════════════════════════════]╗')
@@ -27,29 +27,32 @@ client.user.setGame(`RN | Welcome`,"http://twitch.tv/S-F")
   console.log('')
 });
 
-client.on('message',async message => {
-  if(message.author.bot || message.channel.type === '$bc') return;
-  let args = message.content.split(' ');
-  if(args[0] === `$bc`) {
-    if(!message.member.hasPermission("MANAGE_GUILD")) return message.channel.send('- **أنت لا تملك الصلاحيات اللازمة لأستخدام هذا الأمر**');
-    if(!args[1]) return message.channel.send('- **يجب عليك كتابة الرسالة بعد الأمر**');
-  
-    let msgCount = 0;
-    let errorCount = 0;
-    let successCount = 0;
-    message.channel.send(`**- [ :bookmark: :: ${msgCount} ] ・عدد الرسائل المرسلة**\n**- [ :inbox_tray: :: ${successCount} ] ・عدد الرسائل المستلمة**\n**- [ :outbox_tray: :: ${errorCount} ]・عدد الرسائل الغير مستلمة**`).then(msg => {
-      message.guild.members.forEach(g => {
-        g.send(args.slice(1).join(' ')).then(() => {
-          successCount++;
-          msgCount++;
-          msg.edit(`**- [ :bookmark: :: ${msgCount} ] ・عدد الرسائل المرسلة**\n**- [ :inbox_tray: :: ${successCount} ] ・عدد الرسائل المستلمة**\n**- [ :outbox_tray: :: ${errorCount} ]・عدد الرسائل الغير مستلمة**`);
-        }).catch(e => {
-          errorCount++;
-          msgCount++;
-          msg.edit(`**- [ :bookmark: :: ${msgCount} ] ・عدد الرسائل المرسلة**\n**- [ :inbox_tray: :: ${successCount} ] ・عدد الرسائل المستلمة**\n**- [ :outbox_tray: :: ${errorCount} ]・عدد الرسائل الغير مستلمة**`);
-        });
-      });
+client.on('message', message => {
+    var prefix = "-";
+    
+        if (message.author.id === client.user.id) return;
+        if (message.guild) {
+       let embed = new Discord.RichEmbed()
+        let args = message.content.split(' ').slice(1).join(' ');
+    if(message.content.split(' ')[0] == prefix + 'bc') {
+        if (!args[1]) {
+    message.channel.send("**f!bc <message>**");
+    return;
+    }
+            message.guild.members.forEach(m => {
+       if(!message.member.hasPermission('ADMINISTRATOR')) return;
+                var bc = new Discord.RichEmbed()
+                .addField('» السيرفر :', `${message.guild.name}`)
+                .addField('» المرسل : ', `${message.author.username}#${message.author.discriminator}`)
+                .addField(' » الرسالة : ', args)
+                .setColor('#ff0000')
+                // m.send(`[${m}]`);
+                m.send(`${m}`,{embed: bc});
+            });
+        }
+        } else {
+            return;
+        }
     });
-  }
-});
-client.login('NTI1MzcyMDkzMjE1Mjc3MDYw.Dv1qzw.meZkQ_GOzThgnya7Bz-ddonnt0I');
+
+client.login('BOT_TOKEN');
